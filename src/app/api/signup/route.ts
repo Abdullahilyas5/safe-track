@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 // import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/dbConnect";
-import { User } from "@/model/User"
+import { User } from "@/app/api/main/models/user.model"
 
 type SignupRequestBody = {
   username: string;

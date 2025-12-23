@@ -10,17 +10,25 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { signIn } from "next-auth/react"; // ✅ import NextAuth signIn
+import { Cross } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
 
 // ✅ Validation schema
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
+  role: z.enum(['child', 'parent'])
 });
-
-
-
-
 
 export default function Signup() {
   const form = useForm({
@@ -29,18 +37,10 @@ export default function Signup() {
       name: "",
       email: "",
       password: "",
+      role: "child",
     },
   });
 
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const res = await fetch("api/user/route.ts");
-  //     const data = await res.json();
-  //     console.log("Data from backend on mount:", data);
-  //     alert("Data from backend on mount: " + JSON.stringify(data));
-  //   })();
-  // }, []);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -85,7 +85,8 @@ export default function Signup() {
   return (
     <div className="w-full max-w-xl mx-auto mt-10 p-8 bg-white rounded-lg shadow-lg">
       <Form {...form}>
-        <h2 className="text-4xl font-semibold mb-6 text-center">Sign Up</h2>
+
+        <h2 className="text-4xl text-[#65A30D] font-semibold mb-6 text-center">Sign Up</h2>
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
@@ -101,6 +102,33 @@ export default function Signup() {
               </FormItem>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="role"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Role</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a role" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Roles</SelectLabel>
+                      <SelectItem value="child">Child</SelectItem>
+                      <SelectItem value="parent">Parent</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+
 
           <FormField
             control={form.control}
@@ -134,7 +162,7 @@ export default function Signup() {
             <div className="text-red-500 text-sm mt-2">{error}</div>
           )}
 
-          <Button type="submit" disabled={isLoading} className="w-full">
+          <Button type="submit" disabled={isLoading} className="w-full p-6 bg-[#65A30D] hover:bg-green-700 text-white font-semibold rounded-lg">
             {isLoading ? "Signing up..." : "Sign Up"}
           </Button>
         </form>
@@ -155,30 +183,6 @@ export default function Signup() {
       >
         <FcGoogle size={20} />
         Sign up with Google
-      </Button>
-
-      <Button
-        onClick={async () => {
-          await fetch("/api/user",{
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
-            .then(response => response.json())
-            .then(data => {
-              console.log("Response from backend:", data);
-              alert("Response from backend: " + JSON.stringify(data));
-            })
-            .catch(error => {
-              console.error("Error fetching from backend:", error);
-              alert("Error fetching from backend: " + error.message);
-            });
-        }}
-        className="w-full mt-4 flex bg-white items-center justify-center gap-2 border border-gray-300 text-gray-700 hover:bg-gray-100"
-      >
-        <FcGoogle size={20} />
-        working with backend
       </Button>
     </div>
   );

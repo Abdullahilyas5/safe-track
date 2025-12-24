@@ -6,6 +6,7 @@ import { Button } from "./ui/button";
 import Image from "next/image";
 import { SearchIcon } from "lucide-react";
 import placeholder from "@/../public/images/placeholder.avif";
+import { usePathname } from "next/navigation";
 
 // Define page keys for child and parent
 type ChildPages = "dashboard" | "chat" | "notification" | "settings";
@@ -23,7 +24,24 @@ type Props = {
   currentPage?: ChildPages | ParentPages;
 };
 
-const Topbar = ({ pageKey = "child", currentPage = "dashboard" }: Props) => {
+
+const Topbar = ({ pageKey = "child", currentPage }: Props) => {
+  const pathname = usePathname();
+  const segments = pathname ? pathname.split("/").filter(Boolean) : [];
+  const derivedPageKey = segments[0] === "parent" ? "parent" : "child";
+
+  // derive current page from path (fallback to dashboard)
+  let derivedCurrentPage: ChildPages | ParentPages = "dashboard";
+  if (segments.length >= 2) {
+    const seg = segments[1];
+    if (seg === "chat") derivedCurrentPage = "chat";
+    else if (seg === "notifications" || seg === "notification") derivedCurrentPage = "notification";
+    else if (seg === "settings") derivedCurrentPage = "settings";
+  }
+
+  const effectivePageKey = pageKey ?? derivedPageKey;
+  const effectiveCurrentPage = currentPage ?? derivedCurrentPage;
+
   const [user, setUser] = React.useState<IUser>({
     name: "Guest",
     email: "",
@@ -46,16 +64,16 @@ const Topbar = ({ pageKey = "child", currentPage = "dashboard" }: Props) => {
     settings: { title: "Settings (Parent)", description: "Welcome to your Settings" }
   };
 
-  // Select content based on pageKey
-  const topcontent = pageKey === "child" ? childPages : parentPages;
+  // Select content based on effective pageKey
+  const topcontent = effectivePageKey === "child" ? childPages : parentPages;
 
   return (
     <div className="px-4 py-2 w-full border-b-2 border-gray-400 shadow-lg rounded-b-lg flex justify-between items-center h-max">
       
       {/* Page Title & Description */}
       <div className="flex flex-col gap-2">
-        <h2 className="text-[#65A30D] text-xl font-semibold">{topcontent[currentPage].title}</h2>
-        <div className="text-sm font-medium text-gray-500">{topcontent[currentPage].description}</div>
+        <h2 className="text-[#65A30D] text-xl font-semibold">{topcontent[effectiveCurrentPage].title}</h2>
+        <div className="text-sm font-medium text-gray-500">{topcontent[effectiveCurrentPage].description}</div>
       </div>
 
       {/* Search + User */}

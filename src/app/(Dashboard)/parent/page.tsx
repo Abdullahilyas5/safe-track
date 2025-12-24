@@ -8,14 +8,9 @@ type Props = {}
 const page = (props: Props) => {
   return (
 
-    <div className="w-full h-screen flex flex-1 basis-1/2">
-        <SideBar forUser="parent"/>
-        <div className="flex flex-col w-full">
-            <Topbar currentPage="dashboard" pageKey="parent"/>
-            <Dashboard forUser="parent"/>
-        </div>
-    </div>
-    
+   <div>
+    <Dashboard forUser="parent"/>
+   </div>
   )
 };
 

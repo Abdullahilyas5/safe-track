@@ -11,7 +11,6 @@ const page = (props: Props) => {
   return (
    <div>
     <Dashboard forUser='child'/>
-    
    </div>
   )
 };

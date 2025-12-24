@@ -35,7 +35,7 @@ const  options = {
 
 const SideBar = ({forUser}: Props) => {
     return (
-        <div className="w-max h-screen p-6 bg-white  border-r-2 rounded-lg border-black/40 ">
+        <div className="w-max h-screen sticky top-0 p-6 bg-white  border-r-2 rounded-lg border-black/40 ">
             <div className="flex flex-row-reverse gap-6 justify-center  mb-10 items-center">
                 <span className="p-2 group hover:bg-[#65A30D]  rounded-md">
                     <Sidebar className="text-[#65A30D] group-hover:text-white  z-10 group-hover:cursor-pointer"/>

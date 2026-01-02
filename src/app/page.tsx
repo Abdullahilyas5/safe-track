@@ -1,7 +1,7 @@
 'use client';
 
 import Image from "next/image";
-import landImage from "@/../public/jdkfsjksj.avif";
+import landImage from "@/../public/images/home.avif";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
